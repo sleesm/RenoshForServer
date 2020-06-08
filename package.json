@@ -1,0 +1,20 @@
+{
+  "name": "reviewer-server",
+  "version": "1.0.0",
+  "description": "This is a server side application to provide service to the reviewer front end.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TeamReviewer/reviewer-server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/TeamReviewer/reviewer-server/issues"
+  },
+  "homepage": "https://github.com/TeamReviewer/reviewer-server#readme"
+}
