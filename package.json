@@ -16,5 +16,8 @@
   "bugs": {
     "url": "https://github.com/TeamReviewer/reviewer-server/issues"
   },
-  "homepage": "https://github.com/TeamReviewer/reviewer-server#readme"
+  "homepage": "https://github.com/TeamReviewer/reviewer-server#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  }
 }
