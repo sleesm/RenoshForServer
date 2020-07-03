@@ -1,14 +1,27 @@
-const http = require('http');
+// const http = require('http');
+const express = require('express');
+const app = express(); 
 
-const hostname = '127.0.0.1';
-const port = 8000;
+const UserRouter = require('./routes/User');
+const BookRouter = require('./routes/Book');
+const HighRouter = require('./routes/Highlight');
 
-const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello World');
-});
+app.use('/api/users', UserRouter);
+app.use('/api/books', BookRouter);
+app.use('/api/highlights', HighRouter);
+// const hostname = '127.0.0.1';
+// const port = 8000;
 
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
-});
+// const server = http.createServer((req, res) => {
+//   res.statusCode = 200;
+//   res.setHeader('Content-Type', 'text/plain');
+//   res.end('Hello World');
+// });
+
+// server.listen(port, hostname, () => {
+//   console.log(`Server running at http://${hostname}:${port}/`);
+// });
+
+app.listen(5000, function(){
+  console.log(`app.js is running on port ${5000}`)
+})
