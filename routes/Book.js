@@ -15,6 +15,18 @@ router.get("/:bookid", (req, res)=>{
     res.send(`a book. id: ${req.params.bookid}`);
 });
 
+async function getId(){
+    const { database } = await client.databases.createIfNotExists({ id: 'renosh' });
+    const { container } = await database.containers.createIfNotExists({ id: 'book' });
+    
+    const { resources: itemDefList } = await container.items.readAll().fetchAll();
+
+    for (const itemDef of itemDefList) {
+        console.log(itemDef.id);
+    }
+
+}
+
 async function postBookInfo(){
     const { database } = await client.databases.createIfNotExists({ id: 'renosh' });
     const { container } = await database.containers.createIfNotExists({ id: 'book' });
@@ -39,6 +51,9 @@ async function postBookInfo(){
     for(const book of bookinfo){
         const { resource } = await container.items.create(book); 
     }
+
+    // 받은 키값을 받아와서 res로 보내줘야 한다.
+    getId();
 }
 
 router.post("/", (req, res)=>{
