@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/TeamReviewer/reviewer-server#readme",
   "dependencies": {
+    "@azure/cosmos": "^3.7.4",
     "express": "^4.17.1"
   },
   "devDependencies": {
