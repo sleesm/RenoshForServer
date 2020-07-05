@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { CosmosClient } = require("@azure/cosmos");
 const endpoint = "https://renosh.documents.azure.com:443/"; // Add your endpoint
-const key = "VGGuRGqhhxhHNuDbdpV0ypJo3DlGRtchkGH1ofFgaq3XFX4ynqcJlWbVVoRMk48Gn8jQjxHjfFKpcvbTarRd4A=="; // Add the masterkey of the endpoint
+const key = "key"; // Add the masterkey of the endpoint
 const client = new CosmosClient({ endpoint, key });
 
 let count = 0;
