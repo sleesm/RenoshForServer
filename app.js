@@ -19,7 +19,7 @@ app.use('/api/books', BookRouter);
 app.use('/api/highlights', HighRouter);
 
 //connect cosmos DB
-const endpoint = "https://renosh.documents.azure.com"; // Add your endpoint
+const endpoint = "https://renosh.documents.azure.com=/"; // Add your endpoint
 const key = "masterkey"; // Add the masterkey of the endpoint
 const client = new CosmosClient({ endpoint, key });
 const database = client.database('renosh');
