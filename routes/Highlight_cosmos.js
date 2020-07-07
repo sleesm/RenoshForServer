@@ -3,14 +3,21 @@
 //connect cosmos DB
 const {CosmosClient} = require("@azure/cosmos");
 
-const endpoint = "https://renosh.documents.azure.com:/"; // Add your endpoint
-const key = "masterkey"; // Add the masterkey of the endpoint
+// const endpoint = "https://renosh.documents.azure.com:/"; // Add your endpoint
+// const key = "masterkey"; // Add the masterkey of the endpoint
+
+const endpoint = process.env.COSMOSDB_ENDPOINT; // Add your endpoint
+const key = process.env.COSMOSDB_KEY; // Add the masterkey of the endpoint
+
 const client = new CosmosClient({ endpoint, key });
 const database = client.database('renosh');
 const container = database.container('highlight');
 
 //get all highlights
 async function getallhighlights(req, res) {
+
+    
+
     try{
         const { resources: highlights } = await container.items.readAll().fetchAll();
         highlights.forEach(item => {
@@ -24,6 +31,8 @@ async function getallhighlights(req, res) {
 
 //get highlights of the book
 async function getHglByBook(req, res) {
+    console.log('endpoint: ',endpoint);
+    
     const querySpec = {
         query:
         "SELECT * FROM c WHERE c.book_id = @book_id",

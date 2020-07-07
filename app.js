@@ -13,14 +13,15 @@ const BookRouter = require('./routes/Book');
 const HighRouter = require('./routes/Highlight');
 const {CosmosClient} = require("@azure/cosmos");
 
+require('dotenv').config()
 
 app.use('/api/users', UserRouter);
 app.use('/api/books', BookRouter);
 app.use('/api/highlights', HighRouter);
 
 //connect cosmos DB
-const endpoint = "https://renosh.documents.azure.com=/"; // Add your endpoint
-const key = "masterkey"; // Add the masterkey of the endpoint
+const endpoint = process.env.COSMOSDB_ENDPOINT; // Add your endpoint
+const key = process.env.COSMOSDB_KEY; // Add the masterkey of the endpoint
 const client = new CosmosClient({ endpoint, key });
 const database = client.database('renosh');
 const container = database.container('user');
