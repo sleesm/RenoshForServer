@@ -2,10 +2,11 @@ const express = require('express');
 const router = express.Router();
 const { CosmosClient } = require("@azure/cosmos");
 const endpoint = "https://renosh.documents.azure.com:443/"; // Add your endpoint
-const key = "key"; // Add the masterkey of the endpoint
+const key = "VGGuRGqhhxhHNuDbdpV0ypJo3DlGRtchkGH1ofFgaq3XFX4ynqcJlWbVVoRMk48Gn8jQjxHjfFKpcvbTarRd4A=="; // Add the masterkey of the endpoint   key
 const client = new CosmosClient({ endpoint, key });
 
 let count = 0;
+let bookid =[];
 
 router.get("/", (req, res)=>{
     res.send("list of books");
@@ -15,21 +16,10 @@ router.get("/:bookid", (req, res)=>{
     res.send(`a book. id: ${req.params.bookid}`);
 });
 
-async function getId(){
+async function postBookInfo(req, res){
     const { database } = await client.databases.createIfNotExists({ id: 'renosh' });
     const { container } = await database.containers.createIfNotExists({ id: 'book' });
-    
     const { resources: itemDefList } = await container.items.readAll().fetchAll();
-
-    for (const itemDef of itemDefList) {
-        console.log(itemDef.id);
-    }
-
-}
-
-async function postBookInfo(){
-    const { database } = await client.databases.createIfNotExists({ id: 'renosh' });
-    const { container } = await database.containers.createIfNotExists({ id: 'book' });
 
     const bookinfo = [
         {
@@ -49,18 +39,15 @@ async function postBookInfo(){
     ];
 
     for(const book of bookinfo){
-        const { resource } = await container.items.create(book); 
+        const { resource } = await container.items.create(book);
+        res.send(resource.id);
     }
-
-    // 받은 키값을 받아와서 res로 보내줘야 한다.
-    getId();
 }
 
 router.post("/", (req, res)=>{
-    postBookInfo();
-    console.log("Book info updated successfully.");
-    res.send("Book info updated successfully.");
+    postBookInfo(req, res);
 });
+
 
 router.put("/", (req, res)=>{
     res.send("Book info updated successfully.");
