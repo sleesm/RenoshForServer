@@ -1,23 +1,12 @@
-
-
 //connect cosmos DB
-const {CosmosClient} = require("@azure/cosmos");
+const client = require('./config');
 
-// const endpoint = "https://renosh.documents.azure.com:/"; // Add your endpoint
-// const key = "masterkey"; // Add the masterkey of the endpoint
-
-const endpoint = process.env.COSMOSDB_ENDPOINT; // Add your endpoint
-const key = process.env.COSMOSDB_KEY; // Add the masterkey of the endpoint
-
-const client = new CosmosClient({ endpoint, key });
 const database = client.database('renosh');
 const container = database.container('highlight');
 
+
 //get all highlights
 async function getallhighlights(req, res) {
-
-    
-
     try{
         const { resources: highlights } = await container.items.readAll().fetchAll();
         highlights.forEach(item => {
@@ -31,7 +20,6 @@ async function getallhighlights(req, res) {
 
 //get highlights of the book
 async function getHglByBook(req, res) {
-    console.log('endpoint: ',endpoint);
     
     const querySpec = {
         query:
@@ -44,7 +32,6 @@ async function getHglByBook(req, res) {
             }
         ]
     };
-    //console.log(querySpec);
 
     try{
         const { resources: highlights } = await container.items.query(querySpec).fetchAll();
@@ -59,7 +46,6 @@ async function getHglById(req, res){
     try{
         const item = container.item(req.params.highlight_id,undefined);
         const {resource: highlight} = await item.read();
-        //console.log(item);
         res.status(200).json(highlight);
     } catch(error){
         res.status(500).send(error);
@@ -69,7 +55,6 @@ async function getHglById(req, res){
 
 //post a highlight on the book
 async function postHgl(req, res){
-    //console.log(req.body);
     const highlight = {
         book_id: req.params.book_id,
         user_id: req.body.user_id,
@@ -78,9 +63,8 @@ async function postHgl(req, res){
     };
     try{
         const {item} = await container.items.create(highlight);
-        console.log('Highlight created successfully');
-        //console.log(item.id);
         res.status(200).json({"highlight_id" : item.id});
+        console.log(`Highlight of book ${req.params.book_id} created successfully`);
     } catch(error){
         res.status(500).send(error);
     }
@@ -90,9 +74,8 @@ async function deleteHgl(req, res){
     const high_id = req.params.highlight_id;
     try{
         const {resource: item} = await container.item(high_id, undefined).delete();
-        //console.log(item);
         res.status(200).json({"highlight_id":high_id});
-        console.log("Highlight deleted successfully");
+        console.log(`Highlight ${high_id} deleted successfully`);
     } catch(error){
         res.status(500).send(error);
     }

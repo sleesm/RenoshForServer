@@ -19,12 +19,12 @@ app.use('/api/users', UserRouter);
 app.use('/api/books', BookRouter);
 app.use('/api/highlights', HighRouter);
 
-//connect cosmos DB
-const endpoint = process.env.COSMOSDB_ENDPOINT; // Add your endpoint
-const key = process.env.COSMOSDB_KEY; // Add the masterkey of the endpoint
-const client = new CosmosClient({ endpoint, key });
-const database = client.database('renosh');
-const container = database.container('user');
+// //connect cosmos DB
+// const endpoint = process.env.COSMOSDB_ENDPOINT; // Add your endpoint
+// const key = process.env.COSMOSDB_KEY; // Add the masterkey of the endpoint
+// const client = new CosmosClient({ endpoint, key });
+// const database = client.database('renosh');
+// const container = database.container('user');
 
 // const hostname = '127.0.0.1';
 // const port = 8000;
@@ -41,4 +41,5 @@ const container = database.container('user');
 //getall();
 app.listen(5000, function(){
   console.log(`app.js is running on port ${5000}`)
+  
 })
