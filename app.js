@@ -11,9 +11,9 @@ app.use(bodyParser.json());
 const UserRouter = require('./routes/User');
 const BookRouter = require('./routes/Book');
 const HighRouter = require('./routes/Highlight');
-const {CosmosClient} = require("@azure/cosmos");
+// const {CosmosClient} = require("@azure/cosmos");
 
-require('dotenv').config()
+// require('dotenv').config()
 
 app.use('/api/users', UserRouter);
 app.use('/api/books', BookRouter);
@@ -38,8 +38,7 @@ app.use('/api/highlights', HighRouter);
 // server.listen(port, hostname, () => {
 //   console.log(`Server running at http://${hostname}:${port}/`);
 // });
-//getall();
+
 app.listen(5000, function(){
   console.log(`app.js is running on port ${5000}`)
-  
 })
