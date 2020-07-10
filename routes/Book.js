@@ -10,14 +10,13 @@ async function getListOfBooks(req, res){
     try{
         const { resources: bookList } = await container.items.readAll().fetchAll();
         console.log(bookList)
-        res.json(bookList); //error try-catch 사용
+        res.json(bookList);
     }catch(error){
         res.status(500).send(error);
     }
 }
 
 router.get("/", (req, res)=>{
-    // res.send("list of books");
     getListOfBooks(req, res);
 })
 
@@ -26,23 +25,22 @@ async function getBookWithId(req, res){
         const bookid = req.params.bookid;
         const { resource: book } = await container.item(bookid, undefined).read();
         console.log(book);
-        res.json(book); // 동일 error 발생
+        res.json(book);
     }catch(error){
         res.status(500).send(error);
     }
 }
 
 router.get("/:bookid", (req, res)=>{
-    // res.send(`a book. id: ${req.params.bookid}`);
     getBookWithId(req, res);
 })
 
 async function postBookInfo(req, res){
     const bookinfo =
     {
-        // id : "1",
-        bookName: "The Little Prince",
+        title: "The Little Prince",
         author: "Antoine de Saint-Exupéry",
+        summary: "Summary of The Little Prince",
         image: "https://images-na.ssl-images-amazon.com/images/I/41MkVPBdOOL._SX317_BO1,204,203,200_.jpg",
         epubURL: "https://pdfstop.com/get-download?file=838"
     }
@@ -62,12 +60,12 @@ router.post("/", (req, res)=>{
 
 async function putBookInfo(req, res){
     const bookid = req.params.bookid;
-    // console.log(bookid);
     const bookinfo =
     {
         id : bookid,
-        bookName: "The Little Prince _ updated",
+        title: "The Little Prince",
         author: "Antoine de Saint-Exupéry",
+        summary: "Summary of The Little Prince",
         image: "https://images-na.ssl-images-amazon.com/images/I/41MkVPBdOOL._SX317_BO1,204,203,200_.jpg",
         epubURL: "https://pdfstop.com/get-download?file=838"
     }
