@@ -1,10 +1,7 @@
-
 const express = require('express');
 const router = express.Router();
-const { CosmosClient, TriggerType } = require("@azure/cosmos");
-const endpoint = "https://renosh.documents.azure.com:443/"; // Add your endpoint
-const key = "key"; // Add the masterkey of the endpoint   key
-const client = new CosmosClient({ endpoint, key });
+//connect cosmos DB
+const client = require('./config');
 
 const database = client.database('renosh');
 const container = database.container('book' );

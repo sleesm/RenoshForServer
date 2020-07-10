@@ -6,7 +6,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",
+<<<<<<< HEAD
     "backend": "nodemon app.js"
+=======
+    "startmon": "nodemon app.js"
+>>>>>>> 8a882b0b8762ba72b7efdd56ae99ce407f72ebb8
   },
   "repository": {
     "type": "git",
@@ -20,6 +24,10 @@
   "homepage": "https://github.com/TeamReviewer/reviewer-server#readme",
   "dependencies": {
     "@azure/cosmos": "^3.7.4",
+<<<<<<< HEAD
+=======
+    "dotenv": "^8.2.0",
+>>>>>>> 8a882b0b8762ba72b7efdd56ae99ce407f72ebb8
     "express": "^4.17.1"
   },
   "devDependencies": {
