@@ -63,7 +63,7 @@ router.post("/", (req, res)=>{
 async function putBookInfo(req, res){
     const bookinfo =
     {
-        // id : "1",
+        id : "1",
         bookName: "The Little Prince _ updated",
         author: "Antoine de Saint-Exupéry",
         image: "https://images-na.ssl-images-amazon.com/images/I/41MkVPBdOOL._SX317_BO1,204,203,200_.jpg",
@@ -72,6 +72,7 @@ async function putBookInfo(req, res){
     try{
         const bookid = req.params.bookid;
         console.log(bookid);
+        
         const { resource } = await container.item(bookid,undefined).replace(bookinfo);
         res.send("Book info updated Succesfully");
     }catch(error){
@@ -79,7 +80,7 @@ async function putBookInfo(req, res){
     }
 }
 
-router.put("/bookid", (req, res)=>{
+router.put("/:bookid", (req, res)=>{
     putBookInfo(req, res);
 })
 
