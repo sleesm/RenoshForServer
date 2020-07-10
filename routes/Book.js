@@ -61,18 +61,17 @@ router.post("/", (req, res)=>{
 })
 
 async function putBookInfo(req, res){
+    const bookid = req.params.bookid;
+    // console.log(bookid);
     const bookinfo =
     {
-        id : "1",
+        id : bookid,
         bookName: "The Little Prince _ updated",
         author: "Antoine de Saint-Exupéry",
         image: "https://images-na.ssl-images-amazon.com/images/I/41MkVPBdOOL._SX317_BO1,204,203,200_.jpg",
         epubURL: "https://pdfstop.com/get-download?file=838"
     }
     try{
-        const bookid = req.params.bookid;
-        console.log(bookid);
-        
         const { resource } = await container.item(bookid,undefined).replace(bookinfo);
         res.send("Book info updated Succesfully");
     }catch(error){
