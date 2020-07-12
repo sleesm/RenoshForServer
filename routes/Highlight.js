@@ -1,5 +1,5 @@
 const express = require('express');
-const { getHglByBook, getallhighlights, getHglById, postHgl, deleteHgl } = require('./Highlight_cosmos');
+const { getHglByBook, getallhighlights, getHglById, postHgl, deleteHgl, editHglmemo } = require('./Highlight_cosmos');
 const router = express.Router();
 
 
@@ -22,6 +22,11 @@ router.get('/:highlight_id',(req, res)=>{
 //delete a highlight by id
 router.delete('/:highlight_id',(req, res)=>{
     deleteHgl(req,res);
+})
+
+//edit highlight memo
+router.put('/:highlight_id',(req,res)=>{
+    editHglmemo(req,res);
 })
 
 module.exports = router;

@@ -62,7 +62,8 @@ async function postHgl(req, res){
         memo: req.body.memo
     };
     try{
-        const {item} = await container.items.create(highlight);
+        const {resource:item} = await container.items.create(highlight);
+        console.log(item);
         res.status(200).json({"highlight_id" : item.id});
         console.log(`Highlight of book ${req.params.book_id} created successfully`);
     } catch(error){
@@ -81,10 +82,30 @@ async function deleteHgl(req, res){
     }
 }
 
+async function editHglmemo(req,res){
+    const high_id = req.params.highlight_id;
+    
+    try{
+        const {resource:curitem} = await container.item(high_id,undefined).read();
+        const highlight = {
+            book_id: curitem.book_id,
+            user_id: curitem.user_id,
+            location: curitem.location,
+            memo: req.body.memo,
+            id: high_id,
+        };
+        const { resource:updatedItem } = await container.item(high_id,undefined).replace(highlight);
+        res.status(200).json(updatedItem);
+        console.log(`Highlight ${high_id} updated successfully`);
+    } catch(error){
+        res.status(500).send(error);
+    }
+}
 module.exports = {
     getHglByBook,
     getallhighlights,
     getHglById,
     postHgl,
-    deleteHgl
+    deleteHgl,
+    editHglmemo
 }
