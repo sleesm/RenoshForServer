@@ -23,7 +23,30 @@ async function getHglByBook(req, res) {
     
     const querySpec = {
         query:
-        "SELECT * FROM c WHERE c.book_id = @book_id",
+        "SELECT * FROM c WHERE c.book_id = @book_id AND NOT IS_DEFINED(c.memo)",
+        parameters: [
+            {
+                name:'@book_id',
+                value: req.params.book_id
+                
+            }
+        ]
+    };
+
+    try{
+        const { resources: highlights } = await container.items.query(querySpec).fetchAll();
+        res.status(200).json(highlights);
+    } catch(error){
+        res.status(500).send(error);
+    }
+}
+
+//get annotations of the book
+async function getAnnotByBook(req, res) {
+    
+    const querySpec = {
+        query:
+        "SELECT * FROM c WHERE c.book_id = @book_id AND IS_DEFINED(c.memo)",
         parameters: [
             {
                 name:'@book_id',
@@ -103,6 +126,7 @@ async function editHglmemo(req,res){
 }
 module.exports = {
     getHglByBook,
+    getAnnotByBook,
     getallhighlights,
     getHglById,
     postHgl,
