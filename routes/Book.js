@@ -9,7 +9,7 @@ const container = database.container('book' );
 async function getListOfBooks(req, res){
     try{
         const { resources: bookList } = await container.items.readAll().fetchAll();
-        console.log(bookList)
+        // console.log(bookList)
         res.json(bookList);
     }catch(error){
         res.status(500).send(error);
@@ -36,14 +36,14 @@ router.get("/:bookid", (req, res)=>{
 })
 
 async function postBookInfo(req, res){
-    const bookinfo =
-    {
-        title: "The Little Prince",
-        author: "Antoine de Saint-Exupéry",
-        summary: "Summary of The Little Prince",
-        image: "https://images-na.ssl-images-amazon.com/images/I/41MkVPBdOOL._SX317_BO1,204,203,200_.jpg",
-        epubURL: "https://pdfstop.com/get-download?file=838"
-    }
+    const bookinfo = req.body;
+    // {
+    //     title: "The Little Prince",
+    //     author: "Antoine de Saint-Exupéry",
+    //     summary: "Summary of The Little Prince",
+    //     image: "https://images-na.ssl-images-amazon.com/images/I/41MkVPBdOOL._SX317_BO1,204,203,200_.jpg",
+    //     epubURL: "https://pdfstop.com/get-download?file=838"
+    // }
 
     try{
         const { resource } = await container.items.create(bookinfo);
@@ -60,15 +60,15 @@ router.post("/", (req, res)=>{
 
 async function putBookInfo(req, res){
     const bookid = req.params.bookid;
-    const bookinfo =
-    {
-        id : bookid,
-        title: "The Little Prince",
-        author: "Antoine de Saint-Exupéry",
-        summary: "Summary of The Little Prince",
-        image: "https://images-na.ssl-images-amazon.com/images/I/41MkVPBdOOL._SX317_BO1,204,203,200_.jpg",
-        epubURL: "https://pdfstop.com/get-download?file=838"
-    }
+    const bookinfo = req.body;
+    // {
+    //     id : bookid,
+    //     title: "The Little Prince",
+    //     author: "Antoine de Saint-Exupéry",
+    //     summary: "Summary of The Little Prince",
+    //     image: "https://images-na.ssl-images-amazon.com/images/I/41MkVPBdOOL._SX317_BO1,204,203,200_.jpg",
+    //     epubURL: "https://pdfstop.com/get-download?file=838"
+    // }
     try{
         const { resource } = await container.item(bookid,undefined).replace(bookinfo);
         res.send("Book info updated Succesfully");
