@@ -69,6 +69,8 @@ async function getHglById(req, res){
     try{
         const item = container.item(req.params.highlight_id,undefined);
         const {resource: highlight} = await item.read();
+        console.log(item);
+        console.log(highlight);
         res.status(200).json(highlight);
     } catch(error){
         res.status(500).send(error);
@@ -82,6 +84,7 @@ async function postHgl(req, res){
         book_id: req.params.book_id,
         user_id: req.body.user_id,
         location: req.body.location,
+        text:req.body.text,
         memo: req.body.memo
     };
     try{
