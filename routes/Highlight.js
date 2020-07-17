@@ -1,4 +1,6 @@
 const express = require('express');
+const router = express.Router();
+
 const { getHglByBook, getallhighlights, getHglById, postHgl, deleteHgl, editHglmemo,getAnnotByBook } = require('./Highlight_cosmos');
 const router = express.Router();
 
