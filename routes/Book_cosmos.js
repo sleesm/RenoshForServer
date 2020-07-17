@@ -77,7 +77,7 @@ async function deleteBook(req, res){
 module.exports = {
     getListOfBooks,
     getBookWithId,
-    getHglById,
-    postHgl,
-    deleteHgl
+    postBookInfo,
+    putBookInfo,
+    deleteBook
 }
