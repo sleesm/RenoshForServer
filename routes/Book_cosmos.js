@@ -1,5 +1,3 @@
-const express = require('express');
-const router = express.Router();
 //connect cosmos DB
 const client = require('./config');
 
@@ -16,10 +14,6 @@ async function getListOfBooks(req, res){
     }
 }
 
-router.get("/", (req, res)=>{
-    getListOfBooks(req, res);
-})
-
 async function getBookWithId(req, res){
     try{
         const bookid = req.params.bookid;
@@ -30,10 +24,6 @@ async function getBookWithId(req, res){
         res.status(500).send(error);
     }
 }
-
-router.get("/:bookid", (req, res)=>{
-    getBookWithId(req, res);
-})
 
 async function postBookInfo(req, res){
     const bookinfo = req.body;
@@ -54,10 +44,6 @@ async function postBookInfo(req, res){
     }
 }
 
-router.post("/", (req, res)=>{
-    postBookInfo(req, res);
-})
-
 async function putBookInfo(req, res){
     const bookid = req.params.bookid;
     const bookinfo = req.body;
@@ -77,10 +63,6 @@ async function putBookInfo(req, res){
     }
 }
 
-router.put("/:bookid", (req, res)=>{
-    putBookInfo(req, res);
-})
-
 async function deleteBook(req, res){
     const bookid = req.params.bookid;
     try{
@@ -92,8 +74,10 @@ async function deleteBook(req, res){
     }
 }
 
-router.delete("/:bookid",(req, res)=>{
-    deleteBook(req, res);
-});
-
-module.exports = router;
+module.exports = {
+    getListOfBooks,
+    getBookWithId,
+    getHglById,
+    postHgl,
+    deleteHgl
+}
