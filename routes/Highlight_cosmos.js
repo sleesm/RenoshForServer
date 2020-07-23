@@ -2,7 +2,7 @@
 const client = require('./config');
 
 const database = client.database('renosh');
-const container = database.container('highlight');
+const container = database.container('book');
 
 
 //get all highlights
@@ -23,12 +23,16 @@ async function getHglByBook(req, res) {
     
     const querySpec = {
         query:
-        "SELECT * FROM c WHERE c.book_id = @book_id AND NOT IS_DEFINED(c.memo)",
+        "SELECT * FROM c WHERE c.bookid = @book_id AND c.type = @type AND NOT IS_DEFINED(c.memo)",
         parameters: [
             {
                 name:'@book_id',
                 value: req.params.book_id
                 
+            },
+            {
+                name:'@type',
+                value: "highlight"
             }
         ]
     };
@@ -46,12 +50,16 @@ async function getAnnotByBook(req, res) {
     
     const querySpec = {
         query:
-        "SELECT * FROM c WHERE c.book_id = @book_id AND IS_DEFINED(c.memo)",
+        "SELECT * FROM c WHERE c.bookid = @book_id AND c.type = @type AND IS_DEFINED(c.memo)",
         parameters: [
             {
                 name:'@book_id',
                 value: req.params.book_id
                 
+            },
+            {
+                name:'@type',
+                value: "highlight"
             }
         ]
     };
@@ -67,10 +75,8 @@ async function getAnnotByBook(req, res) {
 //get a highlight by id
 async function getHglById(req, res){
     try{
-        const item = container.item(req.params.highlight_id,undefined);
+        const item = container.item(req.params.highlight_id,req.params.book_id);
         const {resource: highlight} = await item.read();
-        console.log(item);
-        console.log(highlight);
         res.status(200).json(highlight);
     } catch(error){
         res.status(500).send(error);
@@ -81,8 +87,9 @@ async function getHglById(req, res){
 //post a highlight on the book
 async function postHgl(req, res){
     const highlight = {
-        book_id: req.params.book_id,
-        user_id: req.body.user_id,
+        bookid: req.params.book_id,
+        type: "highlight",
+        userid: req.body.user_id,
         location: req.body.location,
         text:req.body.text,
         memo: req.body.memo
@@ -99,8 +106,9 @@ async function postHgl(req, res){
 
 async function deleteHgl(req, res){
     const high_id = req.params.highlight_id;
+    const book_id = req.params.book_id;  //book id 를 params로 넘겨주도록 수정
     try{
-        const {resource: item} = await container.item(high_id, undefined).delete();
+        const {resource: item} = await container.item(high_id, book_id).delete();   
         res.status(200).json({"highlight_id":high_id});
         console.log(`Highlight ${high_id} deleted successfully`);
     } catch(error){
@@ -110,17 +118,19 @@ async function deleteHgl(req, res){
 
 async function editHglmemo(req,res){
     const high_id = req.params.highlight_id;
-    
+    const book_id = req.params.book_id;
     try{
-        const {resource:curitem} = await container.item(high_id,undefined).read();
+        const {resource:curitem} = await container.item(high_id,book_id).read();
         const highlight = {
-            book_id: curitem.book_id,
-            user_id: curitem.user_id,
+            bookid: curitem.bookid,
+            type: curitem.type,
+            userid: curitem.userid,
             location: curitem.location,
+            text: curitem.text,
             memo: req.body.memo,
             id: high_id,
         };
-        const { resource:updatedItem } = await container.item(high_id,undefined).replace(highlight);
+        const { resource:updatedItem } = await container.item(high_id,book_id).replace(highlight);
         res.status(200).json(updatedItem);
         console.log(`Highlight ${high_id} updated successfully`);
     } catch(error){
