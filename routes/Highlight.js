@@ -19,18 +19,18 @@ router.post("/book/:book_id",(req, res)=>{
 })
 
 //get a highlight by id
-router.get('/:highlight_id',(req, res)=>{
+router.get('/:book_id/:highlight_id',(req, res)=>{
     getHglById(req,res);
 })
 
 
 //delete a highlight by id
-router.delete('/:highlight_id',(req, res)=>{
+router.delete('/:book_id/:highlight_id',(req, res)=>{
     deleteHgl(req,res);
 })
 
 //edit highlight memo
-router.put('/:highlight_id',(req,res)=>{
+router.put('/:book_id/:highlight_id',(req,res)=>{
     editHglmemo(req,res);
 })
 
