@@ -86,17 +86,19 @@ async function getHglById(req, res){
 
 //post a highlight on the book
 async function postHgl(req, res){
+    const curdate = new Date().toISOString().replace('T',' ').substr(0,19);
     const highlight = {
         bookid: req.params.book_id,
         type: "highlight",
         userid: req.body.user_id,
         location: req.body.location,
         text:req.body.text,
-        memo: req.body.memo
+        memo: req.body.memo,
+        date:curdate
     };
     try{
         const {resource:item} = await container.items.create(highlight);
-        console.log(item);
+        //console.log(item);
         res.status(200).json({"highlight_id" : item.id});
         console.log(`Highlight of book ${req.params.book_id} created successfully`);
     } catch(error){
