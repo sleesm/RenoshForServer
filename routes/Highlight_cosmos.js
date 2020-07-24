@@ -94,7 +94,7 @@ async function postHgl(req, res){
         location: req.body.location,
         text:req.body.text,
         memo: req.body.memo,
-        date:curdate
+        created_date:curdate
     };
     try{
         const {resource:item} = await container.items.create(highlight);
@@ -131,6 +131,7 @@ async function editHglmemo(req,res){
             text: curitem.text,
             memo: req.body.memo,
             id: high_id,
+            created_date: curitem.created_date
         };
         const { resource:updatedItem } = await container.item(high_id,book_id).replace(highlight);
         res.status(200).json(updatedItem);
