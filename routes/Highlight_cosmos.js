@@ -2,7 +2,7 @@
 const client = require('./config');
 
 const database = client.database('renosh');
-const container = database.container('book');
+const container = database.container('bookbinder');
 
 
 //get all highlights
