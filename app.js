@@ -39,6 +39,6 @@ app.use('/api/highlights', HighRouter);
 //   console.log(`Server running at http://${hostname}:${port}/`);
 // });
 
-app.listen(5000, function(){
-  console.log(`app.js is running on port ${5000}`)
+app.listen(8080, function(){
+  console.log(`app.js is running on port ${8080}`)
 })

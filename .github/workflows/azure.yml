@@ -1,7 +1,7 @@
 on:
   push:
     branches:
-      - master
+      - 398/eunk/server-pipeline-fix
 
 env:
   AZURE_WEBAPP_NAME: renosh-server    # set this to your application's name
