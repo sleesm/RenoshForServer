@@ -5,8 +5,12 @@ const database = client.database('renosh');
 const container = database.container('bookbinder' );
 
 async function getListOfBooks(req, res){
+    const querySpec = {
+        query:
+        "SELECT * FROM c WHERE c.type = 'book'"
+    };
     try{
-        const { resources: bookList } = await container.items.readAll().fetchAll();
+        const { resources: bookList } = await container.items.query(querySpec).fetchAll();
         res.json(bookList);
     }catch(error){
         res.status(500).send(error);
