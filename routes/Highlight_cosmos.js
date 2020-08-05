@@ -3,6 +3,7 @@ const client = require('./config');
 
 const database = client.database('renosh');
 const container = database.container('bookbinder');
+const userContainer = database.container('user');
 
 
 //get all highlights
@@ -18,12 +19,12 @@ async function getallhighlights(req, res) {
     }
 }
 
-//get highlights of the book
+//get highlights and annotations of the book
 async function getHglByBook(req, res) {
     
     const querySpec = {
         query:
-        "SELECT * FROM c WHERE c.bookid = @book_id AND c.type = @type AND NOT IS_DEFINED(c.memo)",
+        "SELECT * FROM c WHERE c.bookid = @book_id AND c.type = @type",// AND NOT IS_DEFINED(c.memo)",
         parameters: [
             {
                 name:'@book_id',
@@ -50,7 +51,7 @@ async function getAnnotByBook(req, res) {
     
     const querySpec = {
         query:
-        "SELECT * FROM c WHERE c.bookid = @book_id AND c.type = @type AND IS_DEFINED(c.memo)",
+        "SELECT * FROM c WHERE c.bookid = @book_id AND c.type = @type AND NOT IS_NULL(c.memo)",
         parameters: [
             {
                 name:'@book_id',
@@ -90,17 +91,23 @@ async function postHgl(req, res){
     const highlight = {
         bookid: req.params.book_id,
         type: "highlight",
-        userid: req.body.user_id,
+        userid: req.body.userid,
         location: req.body.location,
         text:req.body.text,
-        memo: req.body.memo,
+        memo: null,
         created_date:curdate
     };
     try{
+        //create highlight item in Bookbinder Container
         const {resource:item} = await container.items.create(highlight);
-        //console.log(item);
+
+        //userDB 1st v: create highlight item in User Container
+        highlight.id = item.id;
+        const {resource:useritem} = await userContainer.items.create(highlight);
+
         res.status(200).json({"highlight_id" : item.id});
-        console.log(`Highlight of book ${req.params.book_id} created successfully`);
+        console.log(`Highlight of book ${req.params.book_id} and of user ${highlight.userid} created successfully`);
+
     } catch(error){
         res.status(500).send(error);
     }
@@ -128,18 +135,21 @@ async function editHglmemo(req,res){
             type: curitem.type,
             userid: curitem.userid,
             location: curitem.location,
-            text: curitem.text,
-            memo: req.body.memo,
+            text: curitem.text,  
+            memo: req.body.memo,   //if null, highlight. else, annotation
             id: high_id,
             created_date: curitem.created_date
         };
         const { resource:updatedItem } = await container.item(high_id,book_id).replace(highlight);
+
+        const {resource:updatedUserItem} = await userContainer.item(high_id,curitem.userid).replace(highlight);
         res.status(200).json(updatedItem);
         console.log(`Highlight ${high_id} updated successfully`);
     } catch(error){
         res.status(500).send(error);
     }
 }
+
 module.exports = {
     getHglByBook,
     getAnnotByBook,

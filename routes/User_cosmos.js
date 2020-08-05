@@ -3,6 +3,7 @@ const client = require('./config');
 
 const database = client.database('renosh');
 const container = database.container('user');
+const binderContainer = database.container('bookbinder');
 
 
 async function getListOfUsers(req, res){
@@ -83,11 +84,65 @@ async function deleteUserById(req, res){
     }
 }
 
+//userDB 1st v: get high items in User Container
+async function getHglByUser(req, res) {
+    
+    const querySpec = {
+        query:
+        "SELECT * FROM c WHERE c.userid = @user_id AND c.type = @type", 
+        parameters: [
+            {
+                name:'@user_id',
+                value: req.params.user_id
+                
+            },
+            {
+                name:'@type',
+                value: "highlight"
+            }
+        ]
+    };
 
+    try{
+        const { resources: highlights } = await container.items.query(querySpec).fetchAll();
+        res.status(200).json(highlights);
+    } catch(error){
+        res.status(500).send(error);
+    }
+} 
+
+
+//get highlight items only from bookbinder, query by userid. not using partition key.
+async function getHglByUser2(req,res){
+    const querySpec = {
+        query:
+        "SELECT * FROM c WHERE c.userid = @user_id AND c.type = @type", 
+        parameters: [
+            {
+                name:'@user_id',
+                value: req.params.user_id
+                
+            },
+            {
+                name:'@type',
+                value: "highlight"
+            }
+        ]
+    };
+
+    try{
+        const { resources: highlights } = await binderContainer.items.query(querySpec).fetchAll();
+        res.status(200).json(highlights);
+    } catch(error){
+        res.status(500).send(error);
+    }
+}
 module.exports = {
     getListOfUsers,
     postUserInfo,
     getUserById,
     updateUserById,
-    deleteUserById
+    deleteUserById,
+    getHglByUser,
+    getHglByUser2
 }
