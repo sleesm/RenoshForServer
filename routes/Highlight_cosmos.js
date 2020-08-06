@@ -23,7 +23,7 @@ async function getHglByBook(req, res) {
     
     const querySpec = {
         query:
-        "SELECT * FROM c WHERE c.bookid = @book_id AND c.type = @type",
+        "SELECT * FROM c WHERE c.bookid = @book_id AND c.type = @type AND NOT IS_DEFINED(c.memo)",
         parameters: [
             {
                 name:'@book_id',
