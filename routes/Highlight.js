@@ -3,7 +3,7 @@ const express = require('express');
 const { getHglByBook, getallhighlights, getHglById, postHgl, deleteHgl, editHglmemo,getAnnotByBook } = require('./Highlight_cosmos');
 const router = express.Router();
 
-//get highlights of the book
+//get highlights and annotations of the book
 router.get("/book/:book_id/", (req, res)=>{
     getHglByBook(req,res);
 })

@@ -18,12 +18,12 @@ async function getallhighlights(req, res) {
     }
 }
 
-//get highlights of the book
+//get highlights and annotations of the book
 async function getHglByBook(req, res) {
     
     const querySpec = {
         query:
-        "SELECT * FROM c WHERE c.bookid = @book_id AND c.type = @type AND NOT IS_DEFINED(c.memo)",
+        "SELECT * FROM c WHERE c.bookid = @book_id AND c.type = @type",
         parameters: [
             {
                 name:'@book_id',
@@ -50,7 +50,7 @@ async function getAnnotByBook(req, res) {
     
     const querySpec = {
         query:
-        "SELECT * FROM c WHERE c.bookid = @book_id AND c.type = @type AND IS_DEFINED(c.memo)",
+        "SELECT * FROM c WHERE c.bookid = @book_id AND c.type = @type AND NOT IS_NULL(c.memo)",
         parameters: [
             {
                 name:'@book_id',
@@ -90,17 +90,17 @@ async function postHgl(req, res){
     const highlight = {
         bookid: req.params.book_id,
         type: "highlight",
-        userid: req.body.user_id,
+        userid: req.body.userid,
         location: req.body.location,
         text:req.body.text,
-        memo: req.body.memo,
+        memo: null,
         created_date:curdate
     };
     try{
         const {resource:item} = await container.items.create(highlight);
-        //console.log(item);
         res.status(200).json({"highlight_id" : item.id});
         console.log(`Highlight of book ${req.params.book_id} created successfully`);
+
     } catch(error){
         res.status(500).send(error);
     }
@@ -108,7 +108,7 @@ async function postHgl(req, res){
 
 async function deleteHgl(req, res){
     const high_id = req.params.highlight_id;
-    const book_id = req.params.book_id;  //book id 를 params로 넘겨주도록 수정
+    const book_id = req.params.book_id;  
     try{
         const {resource: item} = await container.item(high_id, book_id).delete();   
         res.status(200).json({"highlight_id":high_id});
@@ -128,8 +128,8 @@ async function editHglmemo(req,res){
             type: curitem.type,
             userid: curitem.userid,
             location: curitem.location,
-            text: curitem.text,
-            memo: req.body.memo,
+            text: curitem.text,  
+            memo: req.body.memo,   //if null, highlight. else, annotation
             id: high_id,
             created_date: curitem.created_date
         };
@@ -140,6 +140,7 @@ async function editHglmemo(req,res){
         res.status(500).send(error);
     }
 }
+
 module.exports = {
     getHglByBook,
     getAnnotByBook,

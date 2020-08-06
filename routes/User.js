@@ -1,5 +1,5 @@
 const express = require('express');
-const { getListOfUsers, postUserInfo, getUserById, updateUserById, deleteUserById } = require('./User_cosmos');
+const { getListOfUsers, postUserInfo, getUserById, updateUserById, deleteUserById, getHglByUser} = require('./User_cosmos');
 const router = express.Router();
 
 
@@ -28,6 +28,10 @@ router.delete("/:user_id",(req, res)=>{
     deleteUserById(req, res);
 });
 
+//get user's highlights
+router.get('/:user_id/highlights',(req, res)=>{
+    getHglByUser(req,res);
+})
 
 module.exports = router;
 
