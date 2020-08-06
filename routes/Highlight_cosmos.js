@@ -3,7 +3,6 @@ const client = require('./config');
 
 const database = client.database('renosh');
 const container = database.container('bookbinder');
-const userContainer = database.container('user');
 
 
 //get all highlights
@@ -24,7 +23,7 @@ async function getHglByBook(req, res) {
     
     const querySpec = {
         query:
-        "SELECT * FROM c WHERE c.bookid = @book_id AND c.type = @type",// AND NOT IS_DEFINED(c.memo)",
+        "SELECT * FROM c WHERE c.bookid = @book_id AND c.type = @type",
         parameters: [
             {
                 name:'@book_id',
@@ -98,15 +97,9 @@ async function postHgl(req, res){
         created_date:curdate
     };
     try{
-        //create highlight item in Bookbinder Container
         const {resource:item} = await container.items.create(highlight);
-
-        //userDB 1st v: create highlight item in User Container
-        highlight.id = item.id;
-        const {resource:useritem} = await userContainer.items.create(highlight);
-
         res.status(200).json({"highlight_id" : item.id});
-        console.log(`Highlight of book ${req.params.book_id} and of user ${highlight.userid} created successfully`);
+        console.log(`Highlight of book ${req.params.book_id} created successfully`);
 
     } catch(error){
         res.status(500).send(error);
@@ -115,7 +108,7 @@ async function postHgl(req, res){
 
 async function deleteHgl(req, res){
     const high_id = req.params.highlight_id;
-    const book_id = req.params.book_id;  //book id 를 params로 넘겨주도록 수정
+    const book_id = req.params.book_id;  
     try{
         const {resource: item} = await container.item(high_id, book_id).delete();   
         res.status(200).json({"highlight_id":high_id});
@@ -141,8 +134,6 @@ async function editHglmemo(req,res){
             created_date: curitem.created_date
         };
         const { resource:updatedItem } = await container.item(high_id,book_id).replace(highlight);
-
-        const {resource:updatedUserItem} = await userContainer.item(high_id,curitem.userid).replace(highlight);
         res.status(200).json(updatedItem);
         console.log(`Highlight ${high_id} updated successfully`);
     } catch(error){

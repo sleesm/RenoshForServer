@@ -1,5 +1,5 @@
 const express = require('express');
-const { getListOfUsers, postUserInfo, getUserById, updateUserById, deleteUserById, getHglByUser, getHglByUser2 } = require('./User_cosmos');
+const { getListOfUsers, postUserInfo, getUserById, updateUserById, deleteUserById, getHglByUser} = require('./User_cosmos');
 const router = express.Router();
 
 
@@ -28,14 +28,10 @@ router.delete("/:user_id",(req, res)=>{
     deleteUserById(req, res);
 });
 
-//userDB 1st v: get user's highlights
+//get user's highlights
 router.get('/:user_id/highlights',(req, res)=>{
     getHglByUser(req,res);
 })
 
-//userDB 2nd v: get user's highlights
-router.get('/:user_id/highlights2',(req, res)=>{
-    getHglByUser2(req,res);
-})
 module.exports = router;
 
