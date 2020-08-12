@@ -2,7 +2,7 @@
   "name": "reviewer-server",
   "version": "1.0.0",
   "description": "This is a server side application to provide service to the reviewer front end.",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",
