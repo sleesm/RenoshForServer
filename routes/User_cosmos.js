@@ -50,6 +50,33 @@ async function getUserById(req, res){
     }
 }
 
+async function getMyBookListOfUsersById(req,res){
+    const querySpec = {
+        query:
+        "SELECT * FROM c.mybooklist WHERE c.userid = @user_id AND c.type = @type", 
+        parameters: [
+            {
+                name:'@user_id',
+                value: req.params.user_id
+                
+            },
+            {
+                name:'@type',
+                value: "user"
+            }
+        ]
+    };
+    try{
+        const user_id = req.params.user_id;
+        const {resource: mybooklist} = await container.items.query(querySpec).fetchAll();
+
+        res.status(200).json(mybooklist);
+        console.log(`${mybooklist}`);
+    }catch(error){
+        res.status(500).send(error);
+    }
+}
+}
 
 async function updateUserById(req, res){
     const id = req.params.user_id;
@@ -109,8 +136,10 @@ async function getHglByUser(req,res){
         res.status(500).send(error);
     }
 }
+
 module.exports = {
     getListOfUsers,
+    getMyBookListOfUsersById,
     postUserInfo,
     getUserById,
     updateUserById,

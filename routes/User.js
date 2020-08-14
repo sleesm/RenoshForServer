@@ -18,6 +18,11 @@ router.get('/:user_id', (req, res) => {
     getUserById(req, res);
 });
 
+// get a specfic user's my book list by id
+router.get('/:user_id/mybooklist', (req, res) => {
+    getMyBookListOfUsersById(req, res);
+});
+
 // put(update) a specific user by id
 router.put('/:user_id', (req, res) => {
     updateUserById(req, res);
