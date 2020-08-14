@@ -53,21 +53,15 @@ async function getUserById(req, res){
 async function getMyBookListOfUsersById(req,res){
     const querySpec = {
         query:
-        "SELECT * FROM c.my_book_list WHERE c.userid = @user_id AND c.type = @type", 
+        "SELECT c.my_book_list FROM c WHERE c.id = @user_id", 
         parameters: [
             {
                 name:'@user_id',
                 value: req.params.user_id
-                
-            },
-            {
-                name:'@type',
-                value: "user"
             }
         ]
     };
     try{
-        const user_id = req.params.user_id;
         const {resource: mybooklist} = await container.items.query(querySpec).fetchAll();
 
         res.status(200).json(mybooklist);
@@ -115,7 +109,7 @@ async function updateMyBookListById(req, res){
         console.log(userinfo)
         const {resource: item} = await container.item(id, undefined).replace(userinfo);
         res.status(200).json(item);
-        console.log(`User ${user_id} updated successfully`);
+        console.log(`User ${user_id} my book list updated successfully`);
     } catch(error){
         res.status(500).send(error);
     }

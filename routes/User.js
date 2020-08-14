@@ -1,5 +1,5 @@
 const express = require('express');
-const { getListOfUsers, postUserInfo, getUserById, updateUserById, deleteUserById, getHglByUser} = require('./User_cosmos');
+const { getListOfUsers, getMyBookListOfUsersById, postUserInfo, getUserById, updateUserById,updateMyBookListById, deleteUserById, getHglByUser} = require('./User_cosmos');
 const router = express.Router();
 
 
