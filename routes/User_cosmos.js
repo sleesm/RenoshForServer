@@ -88,7 +88,7 @@ async function deleteUserById(req, res){
 async function getHglByUser(req,res){
     const querySpec = {
         query:
-        "SELECT * FROM c WHERE c.userid = @user_id AND c.type = @type", 
+        "SELECT * FROM c WHERE c.userid = @user_id AND c.type = @type ORDER BY c._ts DESC", 
         parameters: [
             {
                 name:'@user_id',
