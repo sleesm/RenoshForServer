@@ -25,7 +25,8 @@ async function postUserInfo(req, res){
         user_id: req.body.user_id,
         password: req.body.password,
         name: req.body.name,
-        register_type: req.body.register_type
+        register_type: req.body.register_type,
+        my_book_list: req.body.my_book_list
     };
     try{
         const { resource } = await container.items.create(userinfo);
@@ -62,7 +63,7 @@ async function getMyBookListOfUsersById(req,res){
         ]
     };
     try{
-        const {resource: mybooklist} = await container.items.query(querySpec).fetchAll();
+        const {resources: mybooklist} = await container.items.query(querySpec).fetchAll();
 
         res.status(200).json(mybooklist);
         console.log(`${mybooklist}`);
