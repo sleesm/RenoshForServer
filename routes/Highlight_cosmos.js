@@ -91,6 +91,7 @@ async function postHgl(req, res){
         bookid: req.params.book_id,
         type: "highlight",
         userid: req.body.userid,
+        username: req.body.username,
         location: req.body.location,
         text:req.body.text,
         memo: null,
@@ -127,6 +128,7 @@ async function editHglmemo(req,res){
             bookid: curitem.bookid,
             type: curitem.type,
             userid: curitem.userid,
+            username: curitem.username,
             location: curitem.location,
             text: curitem.text,  
             memo: req.body.memo,   //if null, highlight. else, annotation
