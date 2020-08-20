@@ -73,7 +73,7 @@ async function getMyBookListOfUsersById(req,res){
 }
 
 async function updateUserById(req, res){
-    const id = req.params.user_id;
+    const userid = req.params.user_id;
     try{
         const {resource: user} = await container.item(id, undefined).read();
         console.log(user)
@@ -86,8 +86,9 @@ async function updateUserById(req, res){
             my_book_list : req.body.my_book_list
         };
         console.log(userinfo)
-        const {resource: item} = await container.item(id, undefined).replace(userinfo);
-        res.status(200).json(item);
+        const { resource } = await container.item(userid,undefined).replace(bookinfo);
+        // const {resources: item} = await container.item(id, undefined).replace(userinfo);
+        res.status(200).json(`User ${user_id} updated successfully`);
         console.log(`User ${user_id} updated successfully`);
     } catch(error){
         res.status(500).send(error);
@@ -98,18 +99,15 @@ async function updateMyBookListById(req, res){
     const id = req.params.user_id;
     try{
         const {resource: user} = await container.item(id, undefined).read();
-        console.log(user)
         const userinfo = {
             id: user.id, // UPDATE는 id 필요
             user_id: user.user_id,
-            password: user.body.password,
-            name: user.body.name,
-            register_type: user.body.register_type,
+            password: user.password,
+            name: user.name,
+            register_type: user.register_type,
             my_book_list : req.body.my_book_list // update 할 부분
         };
-        console.log(userinfo)
         const {resource: item} = await container.item(id, undefined).replace(userinfo);
-        res.status(200).json(item);
         console.log(`User ${user_id} my book list updated successfully`);
     } catch(error){
         res.status(500).send(error);
