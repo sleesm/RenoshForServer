@@ -23,7 +23,7 @@ async function getHglByBook(req, res) {
     
     const querySpec = {
         query:
-        "SELECT * FROM c WHERE c.bookid = @book_id AND c.type = @type",
+        "SELECT * FROM c WHERE c.bookid = @book_id AND c.type = @type ORDER BY c._ts DESC",
         parameters: [
             {
                 name:'@book_id',
@@ -50,7 +50,7 @@ async function getAnnotByBook(req, res) {
     
     const querySpec = {
         query:
-        "SELECT * FROM c WHERE c.bookid = @book_id AND c.type = @type AND NOT IS_NULL(c.memo)",
+        "SELECT * FROM c WHERE c.bookid = @book_id AND c.type = @type AND NOT IS_NULL(c.memo) ORDER BY c._ts DESC",
         parameters: [
             {
                 name:'@book_id',
