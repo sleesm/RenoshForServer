@@ -1,5 +1,5 @@
 const express = require('express');
-const { getListOfUsers, getMyBookListOfUsersById, postUserInfo, getUserById, updateUserById,updateMyBookListById, deleteUserById, getHglByUser} = require('./User_cosmos');
+const { getListOfUsers, getMyBookListOfUsersById, postUserInfo, getUserById, updateUserById,updateMyBookListById, deleteUserById, getHglofUser, getHglofBookofUser} = require('./User_cosmos');
 const router = express.Router();
 
 
@@ -40,7 +40,11 @@ router.delete("/:user_id",(req, res)=>{
 
 //get user's highlights
 router.get('/:user_id/highlights',(req, res)=>{
-    getHglByUser(req,res);
+    getHglofUser(req,res);
+})
+
+router.get('/:user_id/books/:book_id/highlights',(req,res)=>{
+    getHglofBookofUser(req,res);
 })
 
 module.exports = router;
