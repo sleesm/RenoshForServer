@@ -127,7 +127,7 @@ async function deleteUserById(req, res){
 }
 
 //get highlights by user for mypage
-async function getHglByUser(req,res){
+async function getHglofUser(req,res){
     const querySpec = {
         query:
         "SELECT * FROM c WHERE c.userid = @user_id AND c.type = @type ORDER BY c._ts DESC", 
@@ -152,6 +152,37 @@ async function getHglByUser(req,res){
     }
 }
 
+//get highlights by user of the book
+async function getHglofBookofUser(req,res){
+    const querySpec = {
+        query:
+        "SELECT * FROM c WHERE c.userid = @user_id AND c.type = @type AND c.bookid = @book_id ORDER BY c._ts DESC", 
+        parameters: [
+            {
+                name:'@user_id',
+                value: req.params.user_id
+                
+            },
+            {
+                name:'@type',
+                value: "highlight"
+            },
+            {
+                name:'@book_id',
+                value: req.params.book_id
+                
+            }
+        ]
+    };
+
+    try{
+        const { resources: highlights } = await binderContainer.items.query(querySpec).fetchAll();
+        res.status(200).json(highlights);
+    } catch(error){
+        res.status(500).send(error);
+    }
+}
+
 module.exports = {
     getListOfUsers,
     getMyBookListOfUsersById,
@@ -160,5 +191,6 @@ module.exports = {
     updateUserById,
     updateMyBookListById,
     deleteUserById,
-    getHglByUser
+    getHglofUser,
+    getHglofBookofUser
 }

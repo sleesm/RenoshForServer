@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { getHglByBook, getallhighlights, getHglById, postHgl, deleteHgl, editHglmemo,getAnnotByBook } = require('./Highlight_cosmos');
+const { getHglByBook, getallhighlights, getHglById, postHgl, deleteHgl, editHglmemo,getAnnotByBook, getHglByBookWithScope } = require('./Highlight_cosmos');
 const router = express.Router();
 
 //get highlights and annotations of the book
@@ -34,4 +34,7 @@ router.put('/:book_id/:highlight_id',(req,res)=>{
     editHglmemo(req,res);
 })
 
+router.get("/book/:book_id/:scope", (req, res)=>{
+    getHglByBookWithScope(req,res);
+})
 module.exports = router;

@@ -92,11 +92,13 @@ async function postHgl(req, res){
         type: "highlight",
         userid: req.body.userid,
         username: req.body.username,
+        scope: req.body.scope,
         location: req.body.location,
         text:req.body.text,
         memo: null,
         created_date:curdate
     };
+    if(!highlight.scope) highlight.scope="public";
     try{
         const {resource:item} = await container.items.create(highlight);
         res.status(200).json({"highlight_id" : item.id});
@@ -129,6 +131,7 @@ async function editHglmemo(req,res){
             type: curitem.type,
             userid: curitem.userid,
             username: curitem.username,
+            scope:curitem.scope,
             location: curitem.location,
             text: curitem.text,  
             memo: req.body.memo,   //if null, highlight. else, annotation
@@ -143,6 +146,36 @@ async function editHglmemo(req,res){
     }
 }
 
+//get highlights and annotations of the book with SCOPE
+async function getHglByBookWithScope(req, res) {
+    
+    const querySpec = {
+        query:
+        "SELECT * FROM c WHERE c.bookid = @book_id AND c.type = @type AND c.scope = @scope ORDER BY c._ts DESC",
+        parameters: [
+            {
+                name:'@book_id',
+                value: req.params.book_id
+                
+            },
+            {
+                name:'@type',
+                value: "highlight"
+            },
+            {
+                name:'@scope',
+                value: req.params.scope
+            }
+        ]
+    };
+
+    try{
+        const { resources: highlights } = await container.items.query(querySpec).fetchAll();
+        res.status(200).json(highlights);
+    } catch(error){
+        res.status(500).send(error);
+    }
+}
 module.exports = {
     getHglByBook,
     getAnnotByBook,
@@ -150,5 +183,6 @@ module.exports = {
     getHglById,
     postHgl,
     deleteHgl,
-    editHglmemo
+    editHglmemo,
+    getHglByBookWithScope
 }
