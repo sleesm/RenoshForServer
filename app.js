@@ -9,6 +9,7 @@ app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
 
 const UserRouter = require('./routes/User');
+const UserBookListRouter = require('./routes/UserBookList');
 const BookRouter = require('./routes/Book');
 const HighRouter = require('./routes/Highlight');
 // const {CosmosClient} = require("@azure/cosmos");
@@ -16,6 +17,7 @@ const HighRouter = require('./routes/Highlight');
 // require('dotenv').config()
 
 app.use('/api/users', UserRouter);
+app.use('/api/userbooklist',UserBookListRouter);
 app.use('/api/books', BookRouter);
 app.use('/api/highlights', HighRouter);
 
