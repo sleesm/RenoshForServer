@@ -131,7 +131,7 @@ async function editHglmemo(req,res){
             type: curitem.type,
             userid: curitem.userid,
             username: curitem.username,
-            scope:curitem.scope,
+            scope:req.body.scope,
             location: curitem.location,
             text: curitem.text,  
             memo: req.body.memo,   //if null, highlight. else, annotation
