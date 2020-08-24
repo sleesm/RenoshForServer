@@ -98,7 +98,7 @@ async function postHgl(req, res){
         memo: null,
         created_date:curdate
     };
-    if(!highlight.scope) highlight.scope="public";
+    if(!highlight.scope) highlight.scope="private";
     try{
         const {resource:item} = await container.items.create(highlight);
         res.status(200).json({"highlight_id" : item.id});
