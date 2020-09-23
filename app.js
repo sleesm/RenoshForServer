@@ -12,6 +12,7 @@ const UserRouter = require('./routes/User');
 const UserBookListRouter = require('./routes/UserBookList');
 const BookRouter = require('./routes/Book');
 const HighRouter = require('./routes/Highlight');
+const LikeRouter = require('./routes/Like');
 // const {CosmosClient} = require("@azure/cosmos");
 
 // require('dotenv').config()
@@ -20,6 +21,7 @@ app.use('/api/users', UserRouter);
 app.use('/api/userbooklist',UserBookListRouter);
 app.use('/api/books', BookRouter);
 app.use('/api/highlights', HighRouter);
+app.use('/api/likes',LikeRouter);
 
 // //connect cosmos DB
 // const endpoint = process.env.COSMOSDB_ENDPOINT; // Add your endpoint
