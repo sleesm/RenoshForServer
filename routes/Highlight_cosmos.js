@@ -97,6 +97,7 @@ async function postHgl(req, res){
         text:req.body.text,
         memo: null,
         title: req.body.title,
+        like:0,
         created_date:curdate
     };
     if(!highlight.scope) highlight.scope="private";
@@ -138,7 +139,8 @@ async function editHglmemo(req,res){
             memo: req.body.memo,   //if null, highlight. else, annotation
             id: high_id,
             title: curitem.title,
-            created_date: curitem.created_date
+            created_date: curitem.created_date,
+            like:curitem.like
         };
         const { resource:updatedItem } = await container.item(high_id,book_id).replace(highlight);
         res.status(200).json(updatedItem);
