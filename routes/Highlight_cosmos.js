@@ -148,6 +148,19 @@ async function editHglmemo(req,res){
     }
 }
 
+async function editEmotion(req, res){
+    const high_id = req.params.highlight_id;
+    const book_id = req.params.book_id;
+    try{
+        const {resource:curitem} = await container.item(high_id,book_id).read();
+        curitem.emotion = req.body.emotion;
+        const { resource:updatedItem } = await container.item(high_id,book_id).replace(curitem);
+        res.send(`emotion : ${updatedItem.emotion}`);
+    }catch(error){
+        res.status(500).send(error);
+    }
+}
+
 //get highlights and annotations of the book with SCOPE
 async function getHglByBookWithScope(req, res) {
     
@@ -186,5 +199,6 @@ module.exports = {
     postHgl,
     deleteHgl,
     editHglmemo,
+    editEmotion,
     getHglByBookWithScope
 }
