@@ -53,11 +53,11 @@ async function putEmotionCount(req, res){
     try{
         const {resource:curitem} = await container.item(bookid,undefined).read();
         if(req.body.emotion = "positive"){
-            curitem.emotion.positive = req.body.count            
+            curitem.emotion[0].positive = req.body.count            
         }else if(req.body.emotion = "native"){
-            curitem.emotion.native = req.body.count 
+            curitem.emotion[1].native = req.body.count 
         }else{
-            curitem.emotion.negative = req.body.count
+            curitem.emotion[2].negative = req.body.count
         }
         const { resource } = await container.item(bookid,undefined).replace(curitem);
         res.send(`update to '${req.body.emotion} : ${req.body.count}'`);
