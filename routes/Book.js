@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getListOfBooks, getBookWithId, postBookInfo, putBookInfo, deleteBook } = require('./Book_cosmos');
+const { getListOfBooks, getBookWithId, postBookInfo, putBookInfo, putEmotionCount, deleteBook } = require('./Book_cosmos');
 
 router.get("/", (req, res)=>{
     getListOfBooks(req, res);
@@ -18,6 +18,9 @@ router.put("/:bookid", (req, res)=>{
     putBookInfo(req, res);
 })
 
+router.put("/:bookid/emotion", (req, res) => {
+    putEmotionCount(req, res);
+})
 router.delete("/:bookid",(req, res)=>{
     deleteBook(req, res);
 });
