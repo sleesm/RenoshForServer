@@ -49,10 +49,9 @@ async function putBookInfo(req, res){
 }
 
 async function putEmotionCount(req, res){
-    const bookid = req.params.bookid;
+    const bookid = req.params.book_id;
     try{
         const {resource:curitem} = await container.item(bookid,undefined).read();
-        //console.log(req.body.emotion);
         if(req.body.emotion == "positive"){
             curitem.emotion[0].positive = (parseInt(curitem.emotion[0].positive) + 1)           
         }else if(req.body.emotion == "neutral"){
@@ -61,7 +60,6 @@ async function putEmotionCount(req, res){
             curitem.emotion[2].negative = (parseInt(curitem.emotion[2].negative) + 1)
         }
         const { resource } = await container.item(bookid,undefined).replace(curitem);
-        res.send(`update to count of ${req.body.emotion}`);
     }catch(error){
         res.status(500).send(error);
     }

@@ -1,6 +1,7 @@
 const express = require('express');
 const {getTextAnalyticsData } = require('../helpers/cognitiveAPI');
-const { getHglByBook, getallhighlights, getHglById, postHgl, deleteHgl, deleteHglLike, editHglmemo, editEmotion,getAnnotByBook, getHglByBookWithScope } = require('./Highlight_cosmos');
+const {putEmotionCount} = require('../routes/Book_cosmos');
+const { getHglByBook, getallhighlights, getHglById, postHgl, deleteHgl, deleteHglLike, editHglmemo,getAnnotByBook, getHglByBookWithScope } = require('./Highlight_cosmos');
 const router = express.Router();
 
 //get highlights and annotations of the book
@@ -37,22 +38,18 @@ router.put('/:book_id/:highlight_id',(req,res)=>{
     // 1. REST API 요청을 통해 감정분석 결과 받아옴
     getTextAnalyticsData(req,res).then((respond) => {
         let emotion = respond;
-        //res.body.emotion = emotion;
-        //editEmotion(req, res);
+        req.body.emotion = emotion;
+        editHglmemo(req,res);
+        putEmotionCount(req, res);
     });
-    //console.log(getTextAnalyticsData(req,res));
     // 2. 해당결과를 이용하여 Highlight Memo 정보에 감정 분석 수치 업데이트 
     // 3. Book의 감정 Count 값 갯수 추가 - putEmotionCount
     // 주소 url: https://renosh-text-analytics.cognitiveservices.azure.com/
     // header
     // Content-Type : 
     // Ocp-Apim-Subscription-key : 
-    editHglmemo(req,res);  //Highlight 및 Annotation 정보를 서버로 전송 
+      //Highlight 및 Annotation 정보를 서버로 전송 
 })
-
-// router.put("/:book_id/:highlight_id/emotion", (req,res)=>{
-//     editEmotion(req, res);
-// })
 
 router.get("/book/:book_id/:scope", (req, res)=>{
     getHglByBookWithScope(req,res);

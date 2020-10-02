@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getListOfBooks, getBookWithId, postBookInfo, putBookInfo, putEmotionCount, deleteBook } = require('./Book_cosmos');
+const { getListOfBooks, getBookWithId, postBookInfo, putBookInfo, deleteBook } = require('./Book_cosmos');
 
 router.get("/", (req, res)=>{
     getListOfBooks(req, res);
