@@ -37,8 +37,8 @@ router.put('/:book_id/:highlight_id',(req,res)=>{
     getTextAnalyticsData(req,res).then((respond) => {
         let emotion = respond;
         req.body.emotion = emotion;
-        editHglmemo(req,res);
         putEmotionCount(req, res);
+        editHglmemo(req,res);
     });
 })
 
