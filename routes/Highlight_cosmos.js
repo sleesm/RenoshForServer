@@ -3,6 +3,7 @@ const client = require('./config');
 
 const database = client.database('renosh');
 const container = database.container('bookbinder');
+const likecontainer = database.container('like');
 
 
 //get all highlights
@@ -114,7 +115,9 @@ async function postHgl(req, res){
 async function deleteHgl(req, res){
     const high_id = req.params.highlight_id;
     const book_id = req.params.book_id;  
+    let i;
     try{
+        //delete highlight item
         const {resource: item} = await container.item(high_id, book_id).delete();   
         res.status(200).json({"highlight_id":high_id});
         console.log(`Highlight ${high_id} deleted successfully`);
@@ -123,6 +126,35 @@ async function deleteHgl(req, res){
     }
 }
 
+async function deleteHglLike(req,res){
+    const high_id = req.params.highlight_id;
+    const book_id = req.params.book_id; 
+    let i;
+    try{
+        //delete the highlight from all user's like list (CASCADE DELETE)
+        const {resources:likes} = await likecontainer.items.readAll().fetchAll();
+        likes.forEach(async (item)=>{
+            for(i=0;i<item.highlight_like.length;i++){
+                if(item.highlight_like[i].bookid==book_id){
+                     if(item.highlight_like[i].like.includes(high_id)){
+                        for(let j=0;j<item.highlight_like[i].like.length;j++){
+                            if(item.highlight_like[i].like[j]==high_id){
+                                item.highlight_like[i].like.splice(j,j+1);
+                            }
+                        }
+                    }
+                }
+            }
+
+            //edit like item
+            const {resource: nitem} = await likecontainer.item(item.id, item.userid).replace(item);
+
+        });
+        console.log(`Like lists of highlight ${high_id} deleted successfully`);
+    } catch(error){
+        res.status(500).send(error);
+    }
+}
 async function editHglmemo(req,res){
     const high_id = req.params.highlight_id;
     const book_id = req.params.book_id;
@@ -188,5 +220,6 @@ module.exports = {
     postHgl,
     deleteHgl,
     editHglmemo,
-    getHglByBookWithScope
+    getHglByBookWithScope,
+    deleteHglLike,
 }

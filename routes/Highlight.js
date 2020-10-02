@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { getHglByBook, getallhighlights, getHglById, postHgl, deleteHgl, editHglmemo,getAnnotByBook, getHglByBookWithScope } = require('./Highlight_cosmos');
+const { getHglByBook, getallhighlights, getHglById, postHgl, deleteHgl, deleteHglLike, editHglmemo,getAnnotByBook, getHglByBookWithScope } = require('./Highlight_cosmos');
 const router = express.Router();
 
 //get highlights and annotations of the book
@@ -23,10 +23,12 @@ router.get('/:book_id/:highlight_id',(req, res)=>{
     getHglById(req,res);
 })
 
-
-//delete a highlight by id
+//delete a highlight
 router.delete('/:book_id/:highlight_id',(req, res)=>{
+    //delete a highlight item from bookbinder container
     deleteHgl(req,res);
+    //delete the highlight from all user's like list (CASCADE DELETE)
+    deleteHglLike(req,res);
 })
 
 //edit highlight memo
