@@ -99,6 +99,7 @@ async function postHgl(req, res){
         memo: null,
         title: req.body.title,
         like:0,
+        emotion: null,
         created_date:curdate
     };
     if(!highlight.scope) highlight.scope="private";
@@ -160,21 +161,10 @@ async function editHglmemo(req,res){
     const book_id = req.params.book_id;
     try{
         const {resource:curitem} = await container.item(high_id,book_id).read();
-        const highlight = {
-            bookid: curitem.bookid,
-            type: curitem.type,
-            userid: curitem.userid,
-            username: curitem.username,
-            scope:req.body.scope,
-            location: curitem.location,
-            text: curitem.text,  
-            memo: req.body.memo,   //if null, highlight. else, annotation
-            id: high_id,
-            title: curitem.title,
-            created_date: curitem.created_date,
-            like:curitem.like
-        };
-        const { resource:updatedItem } = await container.item(high_id,book_id).replace(highlight);
+        curitem.scope = req.body.scope;
+        curitem.memo = req.body.memo;
+        curitem.emotion = req.body.emotion;
+        const { resource:updatedItem } = await container.item(high_id,book_id).replace(curitem);
         res.status(200).json(updatedItem);
         console.log(`Highlight ${high_id} updated successfully`);
     } catch(error){

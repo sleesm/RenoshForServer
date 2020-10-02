@@ -48,6 +48,23 @@ async function putBookInfo(req, res){
     }
 }
 
+async function putEmotionCount(req, res){
+    const bookid = req.params.book_id;
+    try{
+        const {resource:curitem} = await container.item(bookid,undefined).read();
+        if(req.body.emotion == "positive"){
+            curitem.emotion[0].positive = (parseInt(curitem.emotion[0].positive) + 1)           
+        }else if(req.body.emotion == "neutral"){
+            curitem.emotion[1].native = (parseInt(curitem.emotion[1].native) + 1) 
+        }else{
+            curitem.emotion[2].negative = (parseInt(curitem.emotion[2].negative) + 1)
+        }
+        const { resource } = await container.item(bookid,undefined).replace(curitem);
+    }catch(error){
+        res.status(500).send(error);
+    }
+}
+
 async function deleteBook(req, res){
     const bookid = req.params.bookid;
     try{
@@ -64,5 +81,6 @@ module.exports = {
     getBookWithId,
     postBookInfo,
     putBookInfo,
+    putEmotionCount,
     deleteBook
 }
