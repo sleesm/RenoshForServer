@@ -34,21 +34,12 @@ router.delete('/:book_id/:highlight_id',(req, res)=>{
 
 //edit highlight memo
 router.put('/:book_id/:highlight_id',(req,res)=>{
-    // req.body.memo의 값을 감정분석 API로 전송하여 결과값을 얻고, 그 결과를 함께 저장. 
-    // 1. REST API 요청을 통해 감정분석 결과 받아옴
     getTextAnalyticsData(req,res).then((respond) => {
         let emotion = respond;
         req.body.emotion = emotion;
         editHglmemo(req,res);
         putEmotionCount(req, res);
     });
-    // 2. 해당결과를 이용하여 Highlight Memo 정보에 감정 분석 수치 업데이트 
-    // 3. Book의 감정 Count 값 갯수 추가 - putEmotionCount
-    // 주소 url: https://renosh-text-analytics.cognitiveservices.azure.com/
-    // header
-    // Content-Type : 
-    // Ocp-Apim-Subscription-key : 
-      //Highlight 및 Annotation 정보를 서버로 전송 
 })
 
 router.get("/book/:book_id/:scope", (req, res)=>{
