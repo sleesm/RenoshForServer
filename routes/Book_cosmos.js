@@ -55,7 +55,7 @@ async function putEmotionCount(req, res){
         //console.log(req.body.emotion);
         if(req.body.emotion == "positive"){
             curitem.emotion[0].positive = (parseInt(curitem.emotion[0].positive) + 1)           
-        }else if(req.body.emotion == "native"){
+        }else if(req.body.emotion == "neutral"){
             curitem.emotion[1].native = (parseInt(curitem.emotion[1].native) + 1) 
         }else{
             curitem.emotion[2].negative = (parseInt(curitem.emotion[2].negative) + 1)

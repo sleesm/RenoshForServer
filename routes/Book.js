@@ -18,9 +18,10 @@ router.put("/:bookid", (req, res)=>{
     putBookInfo(req, res);
 })
 
-router.put("/:bookid/emotion", (req, res) => {
-    putEmotionCount(req, res);
-})
+// router.put("/:bookid/emotion", (req, res) => {
+//     putEmotionCount(req, res);
+// })
+
 router.delete("/:bookid",(req, res)=>{
     deleteBook(req, res);
 });
