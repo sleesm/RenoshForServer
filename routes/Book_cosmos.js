@@ -27,6 +27,21 @@ async function getBookWithId(req, res){
     }
 }
 
+//SELECT c.id , c.emotion[0].positive FROM c WHERE c.type = 'book' ORDER BY c.emotion[0].positive DESC 
+// SELECT * FROM c WHERE c.id IN (SELECT c.id FROM c WHERE c.type = 'book' ORDER BY c.emotion[0].positive DESC)
+async function getBestEmotionBooks(req, res){
+    const querySpec = {
+        query:
+        "SELECT c.id FROM c WHERE c.type = 'book' ORDER BY c.emotion[0].positive DESC"
+    };
+    try{
+        const { resources: bookList } = await container.items.query(querySpec).fetchAll();
+        res.json(bookList);
+    }catch(error){
+        res.status(500).send(error);
+    }
+}
+
 async function postBookInfo(req, res){
     const bookinfo = req.body;
     try{
