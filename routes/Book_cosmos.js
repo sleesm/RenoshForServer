@@ -76,11 +76,24 @@ async function deleteBook(req, res){
     }
 }
 
+async function getBookListofMaxHighlights(req,res){
+    const querySpec = {
+        query:
+        "SELECT * FROM c WHERE c.type = 'book' ORDER BY c.highlight_count DESC oFFSET 0 LIMIT 3 "
+    };
+    try{
+        const { resources: bookList } = await container.items.query(querySpec).fetchAll();
+        res.status(200).json(bookList);
+    }catch(error){
+        res.status(500).send(error);
+    }
+}
 module.exports = {
     getListOfBooks,
     getBookWithId,
     postBookInfo,
     putBookInfo,
     putEmotionCount,
-    deleteBook
+    deleteBook,
+    getBookListofMaxHighlights,
 }
