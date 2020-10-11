@@ -1,6 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const { getListOfBooks, getBookWithId, getBestEmotionBooks, postBookInfo, putBookInfo, deleteBook } = require('./Book_cosmos');
+const { getListOfBooks, getBookWithId, getBestEmotionBooks, postBookInfo, putBookInfo, deleteBook, getBookListofMaxHighlights } = require('./Book_cosmos');
+
+router.get("/highlightmaxbooks",(req,res)=>{
+    getBookListofMaxHighlights(req,res);
+});
 
 router.get("/", (req, res)=>{
     getListOfBooks(req, res);
@@ -26,5 +30,7 @@ router.put("/:bookid", (req, res)=>{
 router.delete("/:bookid",(req, res)=>{
     deleteBook(req, res);
 });
+
+
 
 module.exports = router;

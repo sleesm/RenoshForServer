@@ -1,7 +1,7 @@
 const express = require('express');
 const {getTextAnalyticsData } = require('../helpers/cognitiveAPI');
 const {putEmotionCount} = require('../routes/Book_cosmos');
-const { getHglByBook, getallhighlights, getHglById, postHgl, deleteHgl, deleteHglLike, editHglmemo,getAnnotByBook, getHglByBookWithScope } = require('./Highlight_cosmos');
+const { getHglByBook, getallhighlights, getHglById, increaseBookHgl, postHgl, deleteHgl, deleteHglLike, editHglmemo,getAnnotByBook, getHglByBookWithScope } = require('./Highlight_cosmos');
 const router = express.Router();
 
 //get highlights and annotations of the book
@@ -16,6 +16,7 @@ router.get("/book/:book_id/memo",(req,res)=>{
 
 //post a highlight on the book
 router.post("/book/:book_id",(req, res)=>{
+    increaseBookHgl(req,res);
     postHgl(req, res);  
 })
 

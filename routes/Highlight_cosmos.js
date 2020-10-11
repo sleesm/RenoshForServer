@@ -84,7 +84,16 @@ async function getHglById(req, res){
     }
 }
 
-
+async function increaseBookHgl(req,res){
+    const bookid = req.params.book_id; 
+    try{
+    const {resource:curitem} = await container.item(bookid,undefined).read();
+    curitem.highlight_count +=1;
+    const { resource } = await container.item(bookid,undefined).replace(curitem);
+    } catch(error){
+        res.status(500>send(error));
+    }
+}
 //post a highlight on the book
 async function postHgl(req, res){
     const curdate = new Date().toISOString().replace('T',' ').substr(0,19);
@@ -207,6 +216,7 @@ module.exports = {
     getAnnotByBook,
     getallhighlights,
     getHglById,
+    increaseBookHgl,
     postHgl,
     deleteHgl,
     editHglmemo,
