@@ -32,11 +32,48 @@ async function getBookWithId(req, res){
 async function getBestEmotionBooks(req, res){
     const querySpec = {
         query:
-        "SELECT c.id FROM c WHERE c.type = 'book' ORDER BY c.emotion[0].positive DESC"
+        "SELECT * FROM c WHERE c.type = 'book'"
     };
     try{
         const { resources: bookList } = await container.items.query(querySpec).fetchAll();
-        res.json(bookList);
+        let bestPositive = bookList[0].emotion[0].positive;
+        let bestNeutral = bookList[0].emotion[1].neutral;
+        let bestNegative = bookList[0].emotion[2].negative;
+        let bestPositiveId = bookList[0].id;
+        let bestNeutralId = bookList[0].id;
+        let bestNegativeId = bookList[0].id;
+
+        for(let i = 1; i< bookList.length; i++){
+            if(bestPositive < bookList[i].emotion[0].positive){
+                bestPositive = bookList[i].emotion[0].positive;
+                bestPositiveId = bookList[i].id;
+            }
+            else if(bestNeutral < bookList[i].emotion[1].neutral){
+                bestNeutral = bookList[i].emotion[1].neutral;
+                bestNeutralId = bookList[i].id;                
+            }
+            else if(bestNegative < bookList[i].emotion[2].negative){
+                bestNegative = bookList[i].emotion[2].negative;
+                bestNegativeId = bookList[i].id;
+            }
+        }
+        
+        let bestEmotionId = [
+            {
+                'bestPositiveId' : bestPositiveId,
+                'bestPositive' : bestPositive            
+            },
+            {
+                'bestNeutralId' : bestNeutralId,
+                'bestNeutral' : bestNeutral
+            },
+            {
+                'bestNegativeId' : bestNegativeId,
+                'bestNegative' : bestNegative
+            }
+        ]
+        
+        res.json(bestEmotionId);
     }catch(error){
         res.status(500).send(error);
     }
@@ -70,7 +107,7 @@ async function putEmotionCount(req, res){
         if(req.body.emotion == "positive"){
             curitem.emotion[0].positive = (parseInt(curitem.emotion[0].positive) + 1)           
         }else if(req.body.emotion == "neutral"){
-            curitem.emotion[1].native = (parseInt(curitem.emotion[1].native) + 1) 
+            curitem.emotion[1].neutral = (parseInt(curitem.emotion[1].neutral) + 1) 
         }else{
             curitem.emotion[2].negative = (parseInt(curitem.emotion[2].negative) + 1)
         }
@@ -94,6 +131,7 @@ async function deleteBook(req, res){
 module.exports = {
     getListOfBooks,
     getBookWithId,
+    getBestEmotionBooks,
     postBookInfo,
     putBookInfo,
     putEmotionCount,
