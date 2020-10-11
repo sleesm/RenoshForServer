@@ -24,7 +24,7 @@ async function getHglByBook(req, res) {
     
     const querySpec = {
         query:
-        "SELECT * FROM c WHERE c.bookid = @book_id AND c.type = @type ORDER BY c._ts DESC",
+        "SELECT * FROM c WHERE c.bookid = @book_id AND c.type = @type ORDER BY c.content_ts DESC",
         parameters: [
             {
                 name:'@book_id',
@@ -51,7 +51,7 @@ async function getAnnotByBook(req, res) {
     
     const querySpec = {
         query:
-        "SELECT * FROM c WHERE c.bookid = @book_id AND c.type = @type AND NOT IS_NULL(c.memo) ORDER BY c._ts DESC",
+        "SELECT * FROM c WHERE c.bookid = @book_id AND c.type = @type AND NOT IS_NULL(c.memo) ORDER BY c.content_ts DESC",
         parameters: [
             {
                 name:'@book_id',
@@ -91,12 +91,13 @@ async function increaseBookHgl(req,res){
     curitem.highlight_count +=1;
     const { resource } = await container.item(bookid,undefined).replace(curitem);
     } catch(error){
-        res.status(500>send(error));
+        //res.status(500).send(error);
     }
 }
 //post a highlight on the book
 async function postHgl(req, res){
     const curdate = new Date().toISOString().replace('T',' ').substr(0,19);
+    const content_ts = +new Date()
     const highlight = {
         bookid: req.params.book_id,
         type: "highlight",
@@ -109,7 +110,8 @@ async function postHgl(req, res){
         title: req.body.title,
         like:0,
         emotion: null,
-        created_date:curdate
+        created_date:curdate,
+        content_ts:content_ts
     };
     if(!highlight.scope) highlight.scope="private";
     try{
@@ -168,11 +170,13 @@ async function deleteHglLike(req,res){
 async function editHglmemo(req,res){
     const high_id = req.params.highlight_id;
     const book_id = req.params.book_id;
+    const content_ts = +new Date();
     try{
         const {resource:curitem} = await container.item(high_id,book_id).read();
         curitem.scope = req.body.scope;
         curitem.memo = req.body.memo;
         curitem.emotion = req.body.emotion;
+        curitem.content_ts= content_ts;
         const { resource:updatedItem } = await container.item(high_id,book_id).replace(curitem);
         res.status(200).json(updatedItem);
         console.log(`Highlight ${high_id} updated successfully`);
@@ -186,7 +190,7 @@ async function getHglByBookWithScope(req, res) {
     
     const querySpec = {
         query:
-        "SELECT * FROM c WHERE c.bookid = @book_id AND c.type = @type AND c.scope = @scope ORDER BY c._ts DESC",
+        "SELECT * FROM c WHERE c.bookid = @book_id AND c.type = @type AND c.scope = @scope ORDER BY c.content_ts DESC",
         parameters: [
             {
                 name:'@book_id',
