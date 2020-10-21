@@ -73,7 +73,7 @@ async function getBestEmotionBooks(req, res){
             }
         ]
         
-        res.json(bestEmotionId);
+        res.json(bestEmotionBooks);
     }catch(error){
         res.status(500).send(error);
     }
