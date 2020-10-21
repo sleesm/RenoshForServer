@@ -58,7 +58,7 @@ async function getBestEmotionBooks(req, res){
             }
         }
         
-        let bestEmotionId = [
+        let bestEmotionBooks = [
             {
                 'bestPositiveBook' : bestPositiveBook,
                 'bestPositive' : bestPositive            
