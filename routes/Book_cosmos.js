@@ -39,41 +39,41 @@ async function getBestEmotionBooks(req, res){
         let bestPositive = bookList[0].emotion[0].positive;
         let bestNeutral = bookList[0].emotion[1].neutral;
         let bestNegative = bookList[0].emotion[2].negative;
-        let bestPositiveId = bookList[0].id;
-        let bestNeutralId = bookList[0].id;
-        let bestNegativeId = bookList[0].id;
+        let bestPositiveBook = bookList[0];
+        let bestNeutralBook = bookList[0];
+        let bestNegativeBook = bookList[0];
 
         for(let i = 1; i< bookList.length; i++){
             if(bestPositive < bookList[i].emotion[0].positive){
                 bestPositive = bookList[i].emotion[0].positive;
-                bestPositiveId = bookList[i].id;
+                bestPositiveBook = bookList[i];
             }
             else if(bestNeutral < bookList[i].emotion[1].neutral){
                 bestNeutral = bookList[i].emotion[1].neutral;
-                bestNeutralId = bookList[i].id;                
+                bestNeutralBook = bookList[i];                
             }
             else if(bestNegative < bookList[i].emotion[2].negative){
                 bestNegative = bookList[i].emotion[2].negative;
-                bestNegativeId = bookList[i].id;
+                bestNegativeBook = bookList[i];
             }
         }
         
-        let bestEmotionId = [
+        let bestEmotionBooks = [
             {
-                'bestPositiveId' : bestPositiveId,
+                'bestPositiveBook' : bestPositiveBook,
                 'bestPositive' : bestPositive            
             },
             {
-                'bestNeutralId' : bestNeutralId,
+                'bestNeutralBook' : bestNeutralBook,
                 'bestNeutral' : bestNeutral
             },
             {
-                'bestNegativeId' : bestNegativeId,
+                'bestNegativeBook' : bestNegativeBook,
                 'bestNegative' : bestNegative
             }
         ]
         
-        res.json(bestEmotionId);
+        res.json(bestEmotionBooks);
     }catch(error){
         res.status(500).send(error);
     }
